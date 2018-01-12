@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-01-2018 a las 14:59:47
--- Versión del servidor: 10.1.24-MariaDB
--- Versión de PHP: 7.1.6
+-- Tiempo de generación: 12-01-2018 a las 21:30:20
+-- Versión del servidor: 10.1.16-MariaDB
+-- Versión de PHP: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -57,6 +55,7 @@ CREATE TABLE `elevator` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `path` varchar(255) NOT NULL,
+  `fileName` varchar(50) NOT NULL,
   `description` text NOT NULL,
   `category` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -65,14 +64,14 @@ CREATE TABLE `elevator` (
 -- Volcado de datos para la tabla `elevator`
 --
 
-INSERT INTO `elevator` (`id`, `name`, `path`, `description`, `category`) VALUES
-(1, 'techo1', 'imgs/ceilings/1.png', 'techo 1', 1),
-(2, 'floor', 'imgs/floor/1.png', 'floor', 2),
-(3, 'rails', 'imgs/rails/1.png', 'rails', 3),
-(4, 'raisedbottompanel', 'imgs/raisedbottompanel/1.png', 'raised bottom panel', 4),
-(5, 'raisedmiddlepanel', 'imgs/raisedmiddlepanel/1.png', 'raised bottom panel', 5),
-(6, 'walls', 'imgs/walls/1.png', 'walls', 6),
-(7, 'walls2', 'imgs/walls2/1.png', 'walls2', 7);
+INSERT INTO `elevator` (`id`, `name`, `path`, `fileName`, `description`, `category`) VALUES
+(1, 'techo1', 'imgs/ceilings/', '1.png', 'Aluminio y Luces Led Circulares con contorno en acabado Cromo', 1),
+(2, 'floor', 'imgs/floor/', '1.png', 'floor', 2),
+(3, 'rails', 'imgs/rails/', '1.png', 'rails', 3),
+(4, 'raisedbottompanel', 'imgs/raisedbottompanel/', '1.png', 'raised bottom panel', 4),
+(5, 'raisedmiddlepanel', 'imgs/raisedmiddlepanel/', '1.png', 'raised bottom panel', 5),
+(6, 'walls', 'imgs/walls/', '1.png', 'walls', 6),
+(7, 'walls2', 'imgs/walls2/', '1.png', 'walls2', 7);
 
 --
 -- Índices para tablas volcadas
@@ -114,7 +113,6 @@ ALTER TABLE `elevator`
 --
 ALTER TABLE `elevator`
   ADD CONSTRAINT `fk_elevator_categories` FOREIGN KEY (`category`) REFERENCES `categories` (`id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
