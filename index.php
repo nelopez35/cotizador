@@ -14,7 +14,6 @@
 
 <body>
 <div class="catalogue">
-	<h1>Catalogue</h1>
 </div> 
 	<div class="preview">
 		<div class="title">
