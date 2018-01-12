@@ -21,10 +21,10 @@
 			<h2>Design Preview</h2>
 		</div>
 		<div class="elevatorRender">
-		<div id="prueba">
+		<div class="part" id="prueba">
 			
-			<div id="prueba2">
-				<div id="prueba3">
+			<div class="part" id="prueba2">
+				<div class="part" id="prueba3">
 				
 				</div>
 			</div>
@@ -45,6 +45,7 @@
 		  .done(function( msg ) {
 		    	
 		    json = $.parseJSON(msg);
+		    console.log(json);
 		    catalogue =  $(".catalogue");
 		    $.each(json,function(key,value){
 		    	
@@ -55,19 +56,20 @@
 		    	sectionName = $('<div class="SectionName"></div>');
 		    	sectionName.append("<h1>"+key+"</h1>");
 		    	section.append(sectionName);
+		    	items = $('<div class="items"></div>');
 		    	//listado imagenes
 		    	$.each(value,function(img_key,img_val){
 		    		item = $('<div class="item"></div>');
-
-		    		items = $(''
+		    		items.append(item);
+		    		itemsContent = $(''
 				  	+'<div class="title">'+img_val[1]+'</div>'
-					+'<div class="thumb" id="'+img_val[0]+'"><img src="'+img_val[2]+'"></div>'
-					+'<div class="description">'+img_val[3]+'</div>');	
+					+'<div class="thumb" id="'+img_val[0]+'"><img src="'+img_val[2]+"thumbs/"+img_val[3].replace('png', 'jpg')+'"></div>'
+					+'<div class="description">'+img_val[4]+'</div>');	
 
-					item.append(items);		  
+					item.append(itemsContent);		  
 
 					
-					section.append(item);
+					section.append(items);
 		    		
 
 		    	});
