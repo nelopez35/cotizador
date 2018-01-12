@@ -307,6 +307,7 @@ body {
 	background-image: url("../imgs/walls/1.png");
 }
 .preview .elevatorRender .part{
+	position: absolute;
 	background-size:auto 100%;
 	background-position: center;
 	width: 100%; 
