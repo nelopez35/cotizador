@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <head>
@@ -20,12 +21,12 @@
 			<h2>Design Preview</h2>
 		</div>
 		<div class="elevatorRender">
-			<div class="part" id="prueba">
+			<!--<div class="part" id="prueba">
 			</div>
 			<div class="part" id="prueba2">
 			</div>
 			<div class="part" id="prueba3">
-			</div>
+			</div>-->
 		</div>
 	</div>
  </body>
@@ -71,22 +72,43 @@
 		    	});
 
 
-		    	
+		    	//agregar a elevatorRender para generar los divs que se veran en el desing preview
+
+		    	$(".elevatorRender").append('<div class="part '+key.replace(/ /g,'')+'"></div>');
 
 		    });
 		    $(".thumb").click(function(){
+
+		    	
+
+
 		    	id =  $(this).attr("id");
-				$.ajax({
-				  method: "POST",
-				  url: "imgs.php",
-				  data: { function: "getImage", id:id}
-				})
-				  .done(function( msg ) {
+		
+		    	partExist = $("#"+id+".part");
+		    	if (!partExist.length) {
+		    		$.ajax({
+					  method: "POST",
+					  url: "imgs.php",
+					  data: { function: "getImage", id:id}
+					})
+					  .done(function( msg ) {
 
-				  		
-				  		console.log(msg);
+					  		json = $.parseJSON(msg);
+					  		console.log("#"+json[1].replace(/ /g,''));
+					  		$("."+json[1].replace(/ /g,'')).css("background-image", "url('"+json[0]+"')");
+					  		$("."+json[1].replace(/ /g,'')).attr("id",id);
+					  		
 
-				  });
+
+					  });
+
+		    	}else{
+
+		    		
+		    		$("#"+id+".part").removeAttr("id").removeAttr("style");
+		    	}
+
+				
 			});
 		});
 
@@ -95,4 +117,3 @@
 
  </script>
 </html>
-    

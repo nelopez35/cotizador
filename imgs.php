@@ -41,17 +41,19 @@ function getImages($sige){
 
 function getImage($sige,$id){
 	$json = array();
-	$img = "SELECT path FROM elevator WHERE id =".$id;
+	$img = "SELECT concat(path,fileName), c.name FROM elevator e JOIN categories c ON c.id = e.category WHERE e.id =".$id;
 
 	$cat_query = mysqli_query($sige,$img);
 
 	while($img_data = mysqli_fetch_array($cat_query,MYSQLI_NUM)){
 
-		$image_data = 	$img_data[0];	
+	
+		array_push($json, $img_data[0]);
+		array_push($json, $img_data[1]);	
 
 	} 
 
-	echo $image_data;
+	echo json_encode($json) ;
 
 }
 
