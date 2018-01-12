@@ -20,15 +20,12 @@
 			<h2>Design Preview</h2>
 		</div>
 		<div class="elevatorRender">
-		<div class="part" id="prueba">
-			
-			<div class="part" id="prueba2">
-				<div class="part" id="prueba3">
-				
-				</div>
+			<div class="part" id="prueba">
 			</div>
-		</div>
-
+			<div class="part" id="prueba2">
+			</div>
+			<div class="part" id="prueba3">
+			</div>
 		</div>
 	</div>
  </body>
