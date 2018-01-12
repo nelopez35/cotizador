@@ -290,6 +290,7 @@ body {
 
 	float: left;
 	background-image: url("../imgs/base/base.png");
+	background-position: center;
 	background-size:auto 100%;
 	width: 100%; 
 	height: 500px;
@@ -298,28 +299,18 @@ body {
 }
 
 .preview .elevatorRender #prueba{
-
 	background-image: url("../imgs/ceilings/1.png");
-	background-size:auto 100%;
-	width: 100%; 
-	height: 500px;
-	z-index:1;
-	background-repeat: no-repeat;
 }
 
 .preview .elevatorRender #prueba #prueba2{
-	
 	background-image: url("../imgs/floor/1.png");
-	background-size:auto 100%;
-	width: 100%; 
-	height: 500px;
-	z-index:2;
-	background-repeat: no-repeat;
 }
 .preview .elevatorRender #prueba #prueba2 #prueba3{
-	
 	background-image: url("../imgs/walls/1.png");
+}
+.preview .elevatorRender .part{
 	background-size:auto 100%;
+	background-position: center;
 	width: 100%; 
 	height: 500px;
 	z-index:3;
