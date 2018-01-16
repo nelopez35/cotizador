@@ -9,6 +9,8 @@ switch ($_POST["function"]) {
 	case 'getImage':
 		getImage($sige,$_POST["id"]);
 		break;
+	case 'uploadImage':
+		uploadImage($_POST["image"],$_POST["formData"]);
 	
 	default:
 		# code...
@@ -26,11 +28,19 @@ function getImages($sige){
 
 		$images = "SELECT * FROM elevator WHERE category =".$cat[0];
 		$img_query = mysqli_query($sige,$images);
-		
 		$json[$cat[1]] = array();
+		$children = array();
+		$json[$cat[1]]["children"] = $children;
+		$json[$cat[1]]["zindex"] = $cat[3];
+		
+
+		
+
+
+
 		while ($img = mysqli_fetch_array($img_query,MYSQLI_NUM)) {
 
-			array_push($json[$cat[1]] , $img);
+			array_push($json[$cat[1]]["children"] , $img);
 		}
 
 	} 
@@ -54,6 +64,17 @@ function getImage($sige,$id){
 	} 
 
 	echo json_encode($json) ;
+
+}
+
+function uploadImage($img,$data){
+	$imagedata = base64_decode($img);
+	$filename = md5(uniqid(rand(), true));
+	//path where you want to upload image
+	$file = 'uploads/'.$filename.'.png';
+
+	file_put_contents($file,$imagedata);
+	echo "holis";
 
 }
 

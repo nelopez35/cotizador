@@ -315,6 +315,13 @@ body {
 	z-index:3;
 	background-repeat: no-repeat;
 }
+.cotizador-form{
+
+	position: relative;
+	float: left;
+}
+
+
 
 /*.preview .elevatorRender img{
 	width: 60%;
