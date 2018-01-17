@@ -51,7 +51,7 @@ function getImages($sige){
 
 function getImage($sige,$id){
 	$json = array();
-	$img = "SELECT concat(path,fileName), c.name FROM elevator e JOIN categories c ON c.id = e.category WHERE e.id =".$id;
+	$img = "SELECT concat(path,fileName), c.name, c.layer FROM elevator e JOIN categories c ON c.id = e.category WHERE e.id =".$id;
 
 	$cat_query = mysqli_query($sige,$img);
 
@@ -59,7 +59,8 @@ function getImage($sige,$id){
 
 	
 		array_push($json, $img_data[0]);
-		array_push($json, $img_data[1]);	
+		array_push($json, $img_data[1]);
+		array_push($json, $img_data[2]);
 
 	} 
 
@@ -74,7 +75,6 @@ function uploadImage($img,$data){
 	$file = 'uploads/'.$filename.'.png';
 
 	file_put_contents($file,$imagedata);
-	echo "holis";
 
 }
 
