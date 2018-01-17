@@ -23,21 +23,9 @@
 <body>
 
 <div class="catalogue" id="accordion" role="tablist">
-
-
-
 </div> 
 	<div class="preview">
-		<div class="title">
-			<h2>Design Preview</h2>
-		</div>
 		<div class="elevatorRender">
-			<!--<div class="part" id="prueba">
-			</div>
-			<div class="part" id="prueba2">
-			</div>
-			<div class="part" id="prueba3">
-			</div>-->
 		</div>
 	</div>
 	<form class="form-horizontal cotizador-form" id="cotization-form">
@@ -143,21 +131,25 @@
 
 	                        //listado imagenes
 	                        $.each(value["children"], function(img_key, img_val) {
+	                        	if (key == "ceilings") {
+	                        		collapse = $('<div id="' + key.replace(/ /g, '') + '" class="panel-collapse collapse in aria-expanded="true"></div>');
+	                            panelBody = $('<div class="panel-body"></div>');
+	                        		}else{
 	                            collapse = $('<div id="' + key.replace(/ /g, '') + '" class="panel-collapse collapse"></div>');
 	                            panelBody = $('<div class="panel-body"></div>');
+	                        }
 
 
 
 	                            itemsContent = $('' +
-	                                '<div class="title">' + img_val[1] + '</div>' +
 	                                '<div class="thumb" id="' + img_val[0] + '"><img src="' + img_val[2] + "thumbs/" + img_val[3].replace('png', 'jpg') + '"></div>' +
-	                                '<div class="description">' + img_val[4] + '</div>');
+	                                '<hr>' +
+	                                '<div class="title">' + img_val[1] + '</div>' +
+	                                '<div class="description">' + img_val[4] + '</div>' +
+	                                '<button class="partSelect" id="' + img_val[0] + '">+ Select</button>');
 	                            panelBody.append(itemsContent);
 	                            collapse.append(panelBody);
 	                            panelDefault.append(collapse);
-
-
-
 
 	                        });
 
@@ -171,10 +163,9 @@
 
 	                    });
 
-	                    $(".thumb").click(function() {
+						$(".thumb").click(function() {
 
-
-
+							$(this).next(".partSelect").text("psfasdf");
 
 	                        id = $(this).attr("id");
 
@@ -191,8 +182,10 @@
 	                                .done(function(msg) {
 
 	                                    json = $.parseJSON(msg);
+	                                    console.log(json);
 	                                    console.log("#" + json[1].replace(/ /g, ''));
 	                                    $("." + json[1].replace(/ /g, '')).css("background-image", "url('" + json[0] + "')");
+	                                    $("." + json[1]).css("z-index", json[2]);
 	                                    $("." + json[1].replace(/ /g, '')).attr("id", id);
 
 
@@ -200,8 +193,41 @@
 	                                });
 
 	                        } else {
+	                            $("#" + id + ".part").removeAttr("id").removeAttr("style");
+	                        }
 
 
+	                    });
+
+	                    $(".partSelect").click(function() {
+
+	                        id = $(this).attr("id");
+	                        partExist = $("#" + id + ".part");
+	                        if (!partExist.length) {
+	                        	$(this).text('- Remove');
+	                            $.ajax({
+	                                    method: "POST",
+	                                    url: "imgs.php",
+	                                    data: {
+	                                        function: "getImage",
+	                                        id: id
+	                                    }
+	                                })
+	                                .done(function(msg) {
+
+	                                    json = $.parseJSON(msg);
+	                                    console.log(json);
+	                                    console.log("#" + json[1].replace(/ /g, ''));
+	                                    $("." + json[1].replace(/ /g, '')).css("background-image", "url('" + json[0] + "')");
+	                                    $("." + json[1]).css("z-index", json[2]);
+	                                    $("." + json[1].replace(/ /g, '')).attr("id", id);
+
+
+
+	                                });
+
+	                        } else {
+	                        	$(this).text('+ Select');
 	                            $("#" + id + ".part").removeAttr("id").removeAttr("style");
 	                        }
 
