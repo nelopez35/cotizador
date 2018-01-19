@@ -7,9 +7,9 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 
 
+<link rel="stylesheet" href="css/bootstrap.min.css" >
 
 
-<link rel="stylesheet" href="http://jatoniz.vzpla.net/css/bootstrap.min.css" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><!-- gallery -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><!-- gallery -->
 
@@ -21,6 +21,7 @@
 </head>
 
 <body>
+
 
 <div class="catalogue" id="accordion" role="tablist">
 </div> 
@@ -103,7 +104,16 @@
  </body>
 
  <script type="text/javascript">
+// Carousel Auto-Cycle
+  $(document).ready(function() {
+    $('.carousel').carousel({
+      interval: 6000
+    })
+  });
+
+
  	$(document).ready(function() {
+
 	    $.ajax({
 	            method: "POST",
 	            url: "imgs.php",
@@ -114,7 +124,7 @@
 	        .done(function(msg) {
 
 	            json = $.parseJSON(msg);
-	            console.log(json);
+	           
 	            catalogue = $(".catalogue");
 	            $.each(json, function(key, value) {
 	                console.log(value);
@@ -128,6 +138,7 @@
 	                panelHeading.append(h5);
 	                panelDefault.append(panelHeading);
 
+
 	                //listado imagenes
 	                if (key == "ceilings") {
                         collapse = $('<div id="' + key.replace(/ /g, '') + '" class="panel-collapse collapse in aria-expanded="true"></div>');
@@ -136,52 +147,74 @@
                         collapse = $('<div id="' + key.replace(/ /g, '') + '" class="panel-collapse collapse"></div>');
                         panelBody = $('<div class="panel-body"></div>');
                     }
-
+                     
                     container = $('<div class="container"></div>');
-                    row = $('<div class="row"></div>');
-                    cols = $('<div class="col-xs-11 col-md-10 col-centered"></div>');
-                    carousel = $('<div class="carousel slide" data-ride="carousel" data-type="multi" data-interval="2500"></div>');
+                    cols = $('<div class="col-md-12"></div>');
+                    carousel = $('<div class="carousel slide" id="' + key.replace(/ /g, '') + 'Carousel" ></div>');
                     carouselInner = $('<div class="carousel-inner"></div>');
-                    constrols = $('<div class="left carousel-control"> <a href="#carousel" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a> </div> <div class="right carousel-control"> <a href="#carousel" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div>');
-
+                    constrols = $('<nav> <ul class="control-box pager"> <li><a data-slide="prev" href="#' + key.replace(/ /g, '') + 'Carousel" class=""><i class="glyphicon glyphicon-chevron-left"></i></a></li> <li><a data-slide="next" href="#' + key.replace(/ /g, '') + 'Carousel" class=""><i class="glyphicon glyphicon-chevron-right"></i></li> </ul> </nav>');
+                    
+                    container.append(cols);
+                    cols.append(carousel);
+                    
                     carousel.append(carouselInner);
                     carousel.append(constrols);
-                    cols.append(carousel);
-                    row.append(cols);
-                    container.append(row);
 
-                    collapse.append(panelBody);
-	                panelDefault.append(collapse);
+
+                    
+	                i = 1;
+	                isRow = true;
+	                initialItem = $('<div class="item active"></div>');
+	                thumbnails = $('<lu class="thumbnails"></lu>');
+	                initialItem.append(thumbnails);
+	                carouselInner.append(initialItem);
+
 	                $.each(value["children"], function(img_key, img_val) {
-	                    
 	                
-	                    /*itemsContent = $('' +
-	                        '<div class="thumb img-responsive" id="' + img_val[0] + '"><img src="' + img_val[2] + "thumbs/" + img_val[3].replace('png', 'jpg') + '"></div>' +
-	                        '<hr>' +
-	                        '<div class="title">' + img_val[1] + '</div>' +
-	                        '<div class="description">' + img_val[4] + '</div>' +
-	                        '<button class="partSelect" id="' + img_val[0] + '">+ Select</button>');*/
-	                   
-	                   
-	                    item = '<div class="item">'+
-	                    	'<div class="carousel-col">'+
-	                        '<div class="thumb img-responsive" id="' + img_val[0] + '"><img src="' + img_val[2] + "thumbs/" + img_val[3].replace('png', 'jpg') + '"></div>' +
-	                        '<hr>' +
-	                        '<div class="title">' + img_val[1] + '</div>' +
-	                        '<div class="description">' + img_val[4] + '</div>' +
-	                        '<button class="partSelect" id="' + img_val[0] + '">+ Select</button>'
-							+'</div>'
-							+'</div>';
-	                	
-	                    
-	             
-	                   	carouselInner.append(item);
-	                    //panelBody.append(itemsContent);
-	                
+	                	if (i!=5) {
+	                		li = $('<li class="col-md-3"></li>');
+		                    fff = $('<div class="fff"></div>');
+		                    thumbnail = $('<div class="thumbnail"></div>');
+		                    caption = $('<div class="caption"></div>');
+		                    caption.append('<div class="caption"> <h4>'+img_val[1]+'</h4> <p>'+img_val[4]+'</p> <button class="partSelect" id="'+ img_val[0] + '">+ Select</button> </div>');
+		                    thumbnail.append('<div class="thumb img-responsive" id="'+ img_val[0] + '"><img src="'+ img_val[2] + "thumbs/"+ img_val[3].replace('png', 'jpg') + '"></div>' );
 
+		                    fff.append(thumbnail,caption);
+		                    li.append(fff);
+							thumbnails.append(li);
+
+	                	}else{
+
+	                		
+	                		initialItem = $('<div class="item"></div>');
+	                		thumbnails = $('<lu class="thumbnails"></lu>');
+	                		initialItem.append(thumbnails);
+	                		carouselInner.append(initialItem);
+	                		li = $('<li class="col-md-3"></li>');
+		                    fff = $('<div class="fff"></div>');
+		                    thumbnail = $('<div class="thumbnail"></div>');
+		                    caption = $('<div class="caption"></div>');
+		                    caption.append('<div class="caption"> <h4>'+img_val[1]+'</h4> <p>'+img_val[4]+'</p> <button class="partSelect" id="'+ img_val[0] + '">+ Select</button> </div>');
+		                    thumbnail.append('<div class="thumb img-responsive" id="'+ img_val[0] + '"><img src="'+ img_val[2] + "thumbs/"+ img_val[3].replace('png', 'jpg') + '"></div>' );
+
+		                    fff.append(thumbnail,caption);
+		                    li.append(fff);
+							thumbnails.append(li);
+
+							i=0;
+
+
+
+
+	                	}
+	                    
+
+
+	                	i++;
 	                });
-
 	                panelBody.append(container);
+	                panelDefault.append(collapse);
+	                collapse.append(panelBody);
 	                catalogue.append(panelDefault);
 	                //agregar a elevatorRender para generar los divs que se veran en el desing preview
 	                element = $('<div class="part ' + key.replace(/ /g, '') + '"></div>');
@@ -291,22 +324,7 @@
 
 	                });
 	            });
-	            $('.carousel[data-type="multi"] .item').each(function() {
-	                var next = $(this).next();
-	                if (!next.length) {
-	                    next = $(this).siblings(':first');
-	                }
-	                next.children(':first-child').clone().appendTo($(this));
-
-	                for (var i = 0; i < 2; i++) {
-	                    next = next.next();
-	                    if (!next.length) {
-	                        next = $(this).siblings(':first');
-	                    }
-
-	                    next.children(':first-child').clone().appendTo($(this));
-	                }
-	            });
+	            
 
 
 
