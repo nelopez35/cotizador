@@ -11,7 +11,7 @@ switch ($_POST["function"]) {
 		getImage($sige,$_POST["id"]);
 		break;
 	case 'uploadImage':
-		uploadImage($_POST["image"],$_POST["formData"],$_POST["ids"],$sige);
+		uploadImage($_POST["formData"],$_POST["ids"],$sige);
 	
 	default:
 		# code...
@@ -69,46 +69,52 @@ function getImage($sige,$id){
 
 }
 
-function uploadImage($img,$data,$ids,$sige){
+function uploadImage($data,$ids,$sige){
 
-	$params = array();
-	parse_str($data, $params);
-	
-	$imagedata = base64_decode($img);
-	$filename = md5(uniqid(rand(), true));
-	//path where you want to upload image
-	$file = 'uploads/'.$filename.'.png';
 
-	file_put_contents($file,$imagedata);
-	$mpdf =  new \Mpdf\Mpdf();
-	$stylesheet = file_get_contents('css/pdf_styles.css');
-	$mpdf->WriteHTML($stylesheet,1);
-	//$htmlImageCorrect = str_replace("&quot;", "'", $htmlImage);
-	$i=1;
-	$images = "";
-	$ids = array_unique($ids);
-	$ids = implode(",",$ids);
-	$sql = "SELECT concat(path,fileName) as path, c.layer as zindex FROM elevator e JOIN categories c ON c.id = e.category WHERE e.id in(".$ids.") order by c.layer";
-	$query = mysqli_query($sige,$sql);
-	while($img_data = mysqli_fetch_array($query,MYSQLI_NUM)){
-
+	try {
+		$params = array();
+		parse_str($data, $params);
 		
-			$images .='<div class="part" style="background-image: url(\''.$img_data[0].'\');z-index:'.$img_data[1].';">';
-			$i++;
-	} 
-	
-	for ($j=1; $j < $i; $j++) { 
-		$images .= "</div>";
+		//$imagedata = base64_decode($img);
+		$filename = md5(uniqid(rand(), true));
+		//path where you want to upload image
+		//$file = 'uploads/'.$filename.'.png';
+
+		//file_put_contents($file,$imagedata);
+		$mpdf =  new \Mpdf\Mpdf();
+		$stylesheet = file_get_contents('css/pdf_styles.css');
+		$mpdf->WriteHTML($stylesheet,1);
+		//$htmlImageCorrect = str_replace("&quot;", "'", $htmlImage);
+		$i=1;
+		$images = "";
+		$ids = array_unique($ids);
+		$ids = implode(",",$ids);
+		$sql = "SELECT concat(path,fileName) as path, c.layer as zindex FROM elevator e JOIN categories c ON c.id = e.category WHERE e.id in(".$ids.") order by c.layer";
+		$query = mysqli_query($sige,$sql);
+		while($img_data = mysqli_fetch_array($query,MYSQLI_NUM)){
+
+			
+				$images .='<div class="part" style="background-image: url(\''.$img_data[0].'\');z-index:'.$img_data[1].';">';
+				$i++;
+		} 
+		
+		for ($j=1; $j < $i; $j++) { 
+			$images .= "</div>";
+		}
+
+		$html = '<h1>PRUEBA</h1> <div class="container"> <div class="starter-template"> <h1>COTIZACION</h1> <div class="row"> <div class="preview">'.$images.'
+
+
+		</div><br> </div> <div class="row"> <table class="table"> <thead> <tr> <th scope="col">#</th> <th scope="col">First</th> <th scope="col">Last</th> <th scope="col">Handle</th> </tr> </thead> <tbody> <tr> <th scope="row">1</th> <td>Mark</td> <td>Otto</td> <td>@mdo</td> </tr> <tr> <th scope="row">2</th> <td>Jacob</td> <td>Thornton</td> <td>@fat</td> </tr> <tr> <th scope="row">3</th> <td>Larry</td> <td>the Bird</td> <td>@twitter</td> </tr> </tbody> </table> </div> </div> </div><!-- /.container --> ';
+		$mpdf->WriteHTML($html,2);
+
+		$mpdf->Output($filename.'.pdf');
+		echo json_encode(array("status"=>'ok','desc'=>$filename.'.pdf'));
+	} catch (Exception $e) {
+		echo json_encode("{'status':'fail','desc':'Hubo un error'".$e."}");
 	}
-
-	$html = '<h1>PRUEBA</h1> <div class="container"> <div class="starter-template"> <h1>COTIZACION</h1> <div class="row"> <div class="preview">'.$images.'
-
-
-	</div><br> </div> <div class="row"> <table class="table"> <thead> <tr> <th scope="col">#</th> <th scope="col">First</th> <th scope="col">Last</th> <th scope="col">Handle</th> </tr> </thead> <tbody> <tr> <th scope="row">1</th> <td>Mark</td> <td>Otto</td> <td>@mdo</td> </tr> <tr> <th scope="row">2</th> <td>Jacob</td> <td>Thornton</td> <td>@fat</td> </tr> <tr> <th scope="row">3</th> <td>Larry</td> <td>the Bird</td> <td>@twitter</td> </tr> </tbody> </table> </div> </div> </div><!-- /.container --> ';
-	$mpdf->WriteHTML($html,2);
-
-	echo $html;
-	$mpdf->Output('pdf.pdf');
+	
 
 
 }

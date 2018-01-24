@@ -316,30 +316,38 @@
 
 
 
-	                html2canvas($('.elevatorRender').get(0)).then(function(canvas) {
+	                /*html2canvas($('.elevatorRender').get(0)).then(function(canvas) {
 	                    var dataURL = canvas.toDataURL();
 	                    var imgdata = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-
+*/
 	                    $.ajax({
 	                        url: 'imgs.php',
 	                        type: 'post',
 	                        data: {
-	                            image: imgdata,
+	                            //image: imgdata,
 	                            formData: $("#cotization-form").serialize(),
 	                            ids: array_ids,
 	                            function: "uploadImage"
 	                        },
 	                        dataType: 'json',
 	                        success: function(response) {
-	                            if (response.success) {
-	                                //Post the imgur url to your server
-	                                $.post("yourlinkuploadserver", response.data.link);
+
+	                        	
+
+	                            if (response.status=="ok") {
+	                            	alert("hola");
+	                                a = $('<a href="'+response.desc+'" target="_blank">link</a>');
+	                                $("body").append(a);
+	                                //a.remove();
+
+	                            }else{
+	                            	alert(response.desc);
 	                            }
 	                        }
 	                    });
 
 
-	                });
+	                /*});*/
 	            });
 	            
 
