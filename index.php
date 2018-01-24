@@ -113,7 +113,7 @@
 
 
  	$(document).ready(function() {
-
+ 		var array_ids = [];
 	    $.ajax({
 	            method: "POST",
 	            url: "imgs.php",
@@ -218,6 +218,7 @@
 	                catalogue.append(panelDefault);
 	                //agregar a elevatorRender para generar los divs que se veran en el desing preview
 	                element = $('<div class="part ' + key.replace(/ /g, '') + '"></div>');
+
 	                $(".elevatorRender").append(element);
 
 	                element.css("z-index", value["zindex"]);
@@ -229,9 +230,11 @@
 	                $(this).next(".partSelect").text("psfasdf");
 
 	                id = $(this).attr("id");
-
+	               	
 	                partExist = $("#" + id + ".part");
 	                if (!partExist.length) {
+	                	array_ids.push(id);
+	                	console.log(array_ids);
 	                    $.ajax({
 	                            method: "POST",
 	                            url: "imgs.php",
@@ -254,6 +257,11 @@
 	                        });
 
 	                } else {
+	                	var index = array_ids.indexOf(id);
+	                    if (index > -1) {
+						    array_ids.splice(index, 1);
+						}
+	                	console.log(array_ids);
 	                    $("#" + id + ".part").removeAttr("id").removeAttr("style");
 	                }
 
@@ -263,8 +271,11 @@
 	            $(".partSelect").click(function() {
 
 	                id = $(this).attr("id");
+	                
 	                partExist = $("#" + id + ".part");
 	                if (!partExist.length) {
+	                	array_ids.push(id);
+	                	console.log(array_ids);
 	                    $(this).text('- Remove');
 	                    $.ajax({
 	                            method: "POST",
@@ -277,8 +288,7 @@
 	                        .done(function(msg) {
 
 	                            json = $.parseJSON(msg);
-	                            console.log(json);
-	                            console.log("#" + json[1].replace(/ /g, ''));
+	                            
 	                            $("." + json[1].replace(/ /g, '')).css("background-image", "url('" + json[0] + "')");
 	                            $("." + json[1]).css("z-index", json[2]);
 	                            $("." + json[1].replace(/ /g, '')).attr("id", id);
@@ -289,6 +299,12 @@
 
 	                } else {
 	                    $(this).text('+ Select');
+	                    var index = array_ids.indexOf(id);
+	                    if (index > -1) {
+						    array_ids.splice(index, 1);
+						}
+	                
+	                    console.log(array_ids);
 	                    $("#" + id + ".part").removeAttr("id").removeAttr("style");
 	                }
 
@@ -309,7 +325,8 @@
 	                        type: 'post',
 	                        data: {
 	                            image: imgdata,
-	                            formData: $("cotization-form").serialize(),
+	                            formData: $("#cotization-form").serialize(),
+	                            ids: array_ids,
 	                            function: "uploadImage"
 	                        },
 	                        dataType: 'json',
